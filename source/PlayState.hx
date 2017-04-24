@@ -9,16 +9,24 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 
+import myriad.core.factory.ObstacleFactory;
+
 import myriad.game.Player;
 import myriad.game.Obstacle;
 
 class PlayState extends FlxState
 {
 	public static var TILE_WIDTH:Int = 32;
+
 	public var player:Player;
+
 	public var leftSide:FlxSprite;
+
 	public var rightSide:FlxSprite;
+
 	public var rocks:FlxGroup;
+
+	public var obstFactory:ObstacleFactory;
 
 	override public function create():Void
 	{
@@ -33,12 +41,6 @@ class PlayState extends FlxState
 
 		add(leftSide);
 		add(rightSide);
-
-		// Obstacle tests
-		var obst:Obstacle = new Obstacle(ObstacleType.ROCK);
-		obst.x = 100;
-		obst.y = 100;
-		trace(obst.durability);
 
 		rocks = new FlxGroup();
 
@@ -65,6 +67,15 @@ class PlayState extends FlxState
 		// Create player and add to state
 		player = new Player(0, 0);
 		add(player);
+
+		// Obstacle tests
+		obstFactory = new ObstacleFactory();
+		var obst:Obstacle = obstFactory.getObstacle();
+		obst.revive();
+		obst.x = 100;
+		obst.y = 100;
+		trace(obst.durability);
+		add(obst);
 	}
 
 	override public function update(elapsed:Float):Void

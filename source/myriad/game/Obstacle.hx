@@ -10,18 +10,18 @@ import flixel.util.FlxColor;
  * @author Garren Ijames
  */
 
-abstract ObstacleType(Float) {
+abstract ObstacleType(Float) from Float to Float {
   public static inline var ROCK:Float  = 3;
   public static inline var SHRUB:Float = 2;
   public static inline var BRUSH:Float = 1;
 }
 
-@:forward(x, y)
-abstract Obstacle(FlxSprite)
+@:forward(x, y, kill, revive)
+abstract Obstacle(FlxSprite) from FlxSprite to FlxSprite
 {
   public var durability(get, set):Float;
 
-  inline public function new(durability:Float)
+  inline public function new(?durability:Float = -1)
   {
     this = new FlxSprite();
     this.health = durability;
