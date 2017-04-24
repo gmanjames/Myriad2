@@ -1,0 +1,25 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"name": "Myriad2",
+			"path": "/home/gmanjames/Documents/projects/Myriad2"
+		},
+		{
+			"follow_symlinks": true,
+			"name": "Flixel",
+			"path": "/home/gmanjames/haxelib/flixel/4,2,0/"
+		},
+		{
+			"follow_symlinks": true,
+			"name": "Flixel Addons",
+			"path": "/home/gmanjames/haxelib/flixel-addons/2,2,0/"
+		},
+		{
+			"follow_symlinks": true,
+			"name": "Haxe",
+			"path": "/usr/lib/haxe/std"
+		}
+	]
+}
