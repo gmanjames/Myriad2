@@ -9,9 +9,12 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 
+import myriad.game.Player;
+import myriad.game.Obstacle;
+
 class PlayState extends FlxState
 {
-	private static var TILE_WIDTH:Int = 32;
+	public static var TILE_WIDTH:Int = 32;
 	public var player:Player;
 	public var leftSide:FlxSprite;
 	public var rightSide:FlxSprite;
@@ -30,6 +33,12 @@ class PlayState extends FlxState
 
 		add(leftSide);
 		add(rightSide);
+
+		// Obstacle tests
+		var obst:Obstacle = new Obstacle(ObstacleType.ROCK);
+		obst.x = 100;
+		obst.y = 100;
+		trace(obst.durability);
 
 		rocks = new FlxGroup();
 

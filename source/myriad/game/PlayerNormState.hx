@@ -1,8 +1,10 @@
-package fsm;
+package myriad.game;
 
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.input.keyboard.FlxKey;
+
+import myriad.core.state.BaseState;
 
 class PlayerNormState extends BaseState
 {

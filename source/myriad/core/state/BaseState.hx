@@ -1,4 +1,4 @@
-package fsm;
+package myriad.core.state;
 
 import flixel.FlxG;
 import flixel.FlxObject;

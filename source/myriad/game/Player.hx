@@ -1,10 +1,13 @@
+package myriad.game;
+
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.util.FlxColor;
 
-import fsm.FSM;
-import fsm.PlayerNormState;
+import myriad.core.state.FSM;
+
+import myriad.game.PlayerNormState;
 
 class Player extends FlxSprite
 {
@@ -14,7 +17,7 @@ class Player extends FlxSprite
   {
     super(X, Y);
 
-    brain = new FSM( new PlayerNormState());
+    brain = new FSM( new PlayerNormState() );
 
     makeGraphic(32, 32, FlxColor.ORANGE);
   }
