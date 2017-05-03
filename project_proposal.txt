@@ -1,8 +1,0 @@
-Name of your game - Your name
-General Overview of Play
-
-* Win Condition
-* Lose Condition
-* Player Interaction
-
-List of game features:

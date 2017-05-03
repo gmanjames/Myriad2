@@ -5,6 +5,7 @@ import flixel.FlxObject;
 class FSM
 {
   public var activeState:BaseState;
+  public var transitionState:BaseState;
 
   public function new(initState:BaseState)
   {

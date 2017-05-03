@@ -1,7 +1,6 @@
 package myriad.game;
 
 import flixel.FlxSprite;
-
 import flixel.util.FlxColor;
 
 
@@ -9,7 +8,6 @@ import flixel.util.FlxColor;
  * ...
  * @author Garren Ijames
  */
-
 abstract ObstacleType(Float) from Float to Float {
   public static inline var WATER:Float = 4;
   public static inline var ROCK:Float  = 3;
@@ -38,15 +36,15 @@ abstract ObstacleConfiguration(String) from String to String {
     }
 }
 
-@:forward(x, y, immovable, kill, revive)
+@:forward(x, y, immovable, kill, revive, loadGraphic)
 abstract Obstacle(FlxSprite) from FlxSprite to FlxSprite
 {
-  public var type(get, set):ObstacleType;
+  public var durability(get, set):ObstacleType;
 
-  inline public function new(?type:Float = -1)
+  inline public function new(?durability:Float = -1)
   {
     this = new FlxSprite();
-    this.health = type;
+    this.health = durability;
   }
 
   inline private function getThis():FlxSprite
@@ -54,26 +52,14 @@ abstract Obstacle(FlxSprite) from FlxSprite to FlxSprite
       return this;
   }
 
-  public function get_type():ObstacleType
+  public function get_durability():Float
   {
     return getThis().health;
   }
 
-  public function set_type(type:ObstacleType):ObstacleType
+  public function set_durability(durability:Float):ObstacleType
   {
-    getThis().health = type;
-    switch (type)
-    {
-      case ObstacleType.WATER:
-        this.loadGraphic(AssetPaths.water1__png, false, 32, 32);
-      case ObstacleType.ROCK:
-        this.loadGraphic(AssetPaths.rock1__png, false, 32, 32);
-      case ObstacleType.SHRUB:
-        this.loadGraphic(AssetPaths.water1__png);
-      case ObstacleType.BRUSH:
-        this.loadGraphic(AssetPaths.water1__png);
-    }
-
-    return type;
+    getThis().health = durability;
+    return durability;
   }
 }

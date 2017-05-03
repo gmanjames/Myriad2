@@ -3,10 +3,9 @@ package myriad.game;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.input.keyboard.FlxKey;
-
 import myriad.core.state.BaseState;
 
-class PlayerNormState extends BaseState
+class PlayerNormState extends PlayerState
 {
   private static var SPEED:Float = 200;
 
@@ -18,9 +17,7 @@ class PlayerNormState extends BaseState
   private override function transition(object:FlxObject):Bool
   {
     var player = cast(object, Player);
-
     //...
-
     return super.transition(object);
   }
 

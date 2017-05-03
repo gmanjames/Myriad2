@@ -85,8 +85,10 @@ class BaseState
    *
    * @param object The FlxObject this state belongs to
    */
-  public function enter(object:FlxObject):Void
-  {}
+  public function enter(object:FlxObject):BaseState
+  {
+    return this;
+  }
 
   /**
    * The regular actions for this state to perform on the object it belongs to.

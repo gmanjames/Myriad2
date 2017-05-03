@@ -58,9 +58,11 @@ class ObstacleManager
   {
     var xPos = col * PlayState.TILE_WIDTH;
     var yPos = row * PlayState.TILE_WIDTH;
-    obstacles.forEach(function(obst:Obstacle):Void {
+
+    for (obst in obstacles)
+    {
       obst.x += xPos;
       obst.y += yPos;
-    });
+    }
   }
 }
