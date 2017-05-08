@@ -14,14 +14,18 @@ import flixel.FlxObject;
 class BaseState
 {
   public  var nextState:Null<BaseState>;
-
+  public  var subState:Null<BaseState>;
   private var framesLeft:Int;
   private var duration:Float;
+  private var subStateActive:Bool;
 
-  public function new()
+  public function new(?nextState:BaseState, ?subState:BaseState)
   {
     framesLeft = -1;
     duration   = -1;
+    this.nextState = nextState;
+    this.subState  = subState;
+    subStateActive = false;
   }
 
   /**
@@ -36,6 +40,15 @@ class BaseState
   {
     if (!transition(object))
     {
+      if (subStateActive)
+      {
+        var next = subState.update(object);
+        if (next == this)
+          subStateActive = false;
+
+        return null;
+      }
+
       action(object);
       return null;
     }

@@ -12,6 +12,7 @@ import flixel.math.FlxMath;
 import openfl.Assets;
 import myriad.core.factory.ObstacleFactory;
 import myriad.game.Player;
+import myriad.game.Portal;
 import myriad.game.Bulldozer;
 import myriad.game.Obstacle;
 import myriad.game.ObstacleManager;
@@ -42,11 +43,15 @@ class PlayState extends FlxState
 	private var borders:FlxGroup;
 
 	// Areas for player movement
-	private var leftSide:FlxSprite;
-	private var rightSide:FlxSprite;
+	public var leftSide:FlxSprite;
+	public var rightSide:FlxSprite;
+
+	// Portals to move between sides
+	private var portals:FlxGroup;
 
 	// Game flags
 	private var gameOver:Bool;
+	public  var beginTeleport:Bool;
 
 	override public function create():Void
 	{
@@ -58,18 +63,32 @@ class PlayState extends FlxState
 		leftSide.active = rightSide.active = false;
 		leftSide.makeGraphic(TILE_WIDTH * 4, FlxG.height, FlxColor.GREEN);
 		rightSide.makeGraphic(TILE_WIDTH * 4, FlxG.height, FlxColor.GREEN);
+		leftSide.facing  = FlxObject.RIGHT;
+		rightSide.facing = FlxObject.LEFT;
 
 		add(leftSide);
 		add(rightSide);
 
+		// Create portals for player used
+		portals = new FlxGroup();
+		var leftPortal = new Portal(0, FlxG.height / 2 - TILE_WIDTH);
+		var rightPortal = new Portal(FlxG.width - TILE_WIDTH, FlxG.height / 2 - TILE_WIDTH);
+		leftPortal.endpoint.set(rightPortal.x - 3, rightPortal.y);
+		rightPortal.endpoint.set(leftPortal.x + 3, leftPortal.y);
+
+		portals.add(leftPortal);
+		portals.add(rightPortal);
+		add(portals);
+
 		// Create Enemies
 		bulldozers = new FlxTypedGroup<Bulldozer>();
 		var bulldozer = new Bulldozer(((FlxG.width / TILE_WIDTH) / 2) * TILE_WIDTH, 0);
+
 		bulldozers.add(bulldozer);
 		add(bulldozers);
 
 		// Create player and add to state
-		player = new Player(0, 0);
+		player = new Player(5, 5);
 		add(player);
 
 		playerBullets = new FlxTypedGroup<FlxSprite>(15);
@@ -95,6 +114,7 @@ class PlayState extends FlxState
 		loadObstacles();
 
 		gameOver = false;
+		beginTeleport = false;
 	}
 
 	override public function update(elapsed:Float):Void
@@ -104,6 +124,8 @@ class PlayState extends FlxState
 		checkEnemiesInsideBounds();
 		if (!gameOver)
 		{
+			beginTeleport = false;
+
 			// Make sure player cannot cross over borders
 			FlxG.collide(player, borders);
 
@@ -112,6 +134,9 @@ class PlayState extends FlxState
 
 			// Enemy/player bullet interaction
 			FlxG.overlap(playerBullets, bulldozers, playerBulletOverlapEnemy);
+
+			// Player walks into portals
+			FlxG.overlap(player, portals, playerOverlapPortals);
 		}
 		else
 		{
@@ -166,18 +191,18 @@ class PlayState extends FlxState
 				{
 					currentConfiguration = starObstacleConf;
 				}
-				if (FlxG.random.bool(25))
+				if (FlxG.random.bool(35))
 				{
 					currentConfiguration = sparseObstacleConf;
 				}
 
 				// Here, determine a random obstacle type
 				var currentType:ObstacleType = ObstacleType.BRUSH;
-				if (FlxG.random.bool(30))
+				if (FlxG.random.bool(35))
 				{
 					currentType = ObstacleType.SHRUB;
 				}
-				if (FlxG.random.bool(25))
+				if (FlxG.random.bool(35))
 				{
 					currentType = ObstacleType.ROCK;
 				}
@@ -237,6 +262,21 @@ class PlayState extends FlxState
 		if (!allBulldozersInMap)
 		{
 			gameOver = true;
+		}
+	}
+
+	private function playerOverlapPortals(player:Player, portal:Portal):Void
+	{
+		if (portal.ready)
+		{
+			beginTeleport = true;
+
+			for (exit in portals)
+			{
+				cast(exit, Portal).ready = false;
+			}
+
+			portal.teleport(player);
 		}
 	}
 }

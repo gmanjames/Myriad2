@@ -14,6 +14,11 @@ class PlayerNormState extends PlayerState
     super();
   }
 
+  public override function update(object:FlxObject):BaseState
+  {
+    return super.update(object);
+  }
+
   private override function transition(object:FlxObject):Bool
   {
     var player = cast(object, Player);
@@ -52,6 +57,17 @@ class PlayerNormState extends PlayerState
       }
     }
 
+    if (cast(FlxG.state, PlayState).beginTeleport)
+    {
+      if (subState == null)
+      {
+        subState = new PlayerTeleportSubState(this);
+      }
+
+      subStateActive = true;
+      cast(subState, PlayerTeleportSubState).reset(1);
+      subState.enter(player);
+    }
 
     super.action(object);
   }
