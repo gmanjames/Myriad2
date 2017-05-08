@@ -10,6 +10,7 @@ import myriad.game.PlayerNormState;
 
 class Player extends FlxSprite
 {
+  public  var changingZones:Bool;
   private var brain:FSM;
   private var fireClock:Float;
 
@@ -20,6 +21,8 @@ class Player extends FlxSprite
     brain = new FSM( new PlayerNormState() );
 
     fireClock = 0; // zero so you can fire as soon as the game starts
+
+    changingZones = false;
 
     makeGraphic(32, 32, FlxColor.ORANGE);
   }
@@ -37,9 +40,18 @@ class Player extends FlxSprite
   {
     if (fireClock <= 0)
     {
-      var bullet = cast(FlxG.state, PlayState).playerBullets.recycle();
+      var state = cast(FlxG.state, PlayState);
+      var bullet = state.playerBullets.recycle();
       bullet.reset(x + width / 2, y + height / 2);
-      bullet.velocity.x = 600;
+
+      if (state.leftSide.overlaps(this))
+      {
+        bullet.velocity.x = 550;
+      }
+      else if (state.rightSide.overlaps(this))
+      {
+        bullet.velocity.x = -550;
+      }
 
       fireClock = 1;
     }
