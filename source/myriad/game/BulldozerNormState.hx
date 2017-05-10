@@ -14,6 +14,6 @@ class BulldozerNormState extends BaseState
 
   private override function action(object:FlxObject):Void
   {
-    object.velocity.y = 30;
+    object.velocity.y = 15;
   }
 }

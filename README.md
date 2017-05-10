@@ -1,6 +1,5 @@
 # Myriad - By Garren Ijames
 ## Overview:
-If possible, when I go to begin new projects I try to keep certain themes in mind. One such theme that has become increasingly prevalent in my life has been the prototypical, man as a part of nature. Or what might sound more familiar, man vs. nature. I do not like that wording, as for me it brings to mind what Alan Watts might describe as, “Trying to bite one’s own teeth”.
 The idea for Myriad is a simple, single-player, top-down, shooter-type game, featuring a woodland sprite (the player) desperately trying to save their forest home from a demolition team of enemy characters that would otherwise destroy it.
 
 ## Game-play:

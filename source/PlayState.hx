@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.util.FlxColor;
+import flixel.util.FlxSpriteUtil;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -14,6 +15,7 @@ import myriad.core.factory.ObstacleFactory;
 import myriad.game.Player;
 import myriad.game.Portal;
 import myriad.game.Bulldozer;
+import myriad.game.Drone;
 import myriad.game.Obstacle;
 import myriad.game.ObstacleManager;
 
@@ -25,10 +27,12 @@ class PlayState extends FlxState
 	// Player sprite
 	public var player:Player;
 	public var playerBullets:FlxTypedGroup<FlxSprite>;
+	public var enemyBullets:FlxTypedGroup<FlxSprite>;
 
 	// Enemies
 	public var bulldozers:FlxTypedGroup<Bulldozer>;
-	public var scouts:FlxGroup;
+	public var drones:FlxTypedGroup<Drone>;
+	public var enemies:FlxGroup;
 
 
 	public var defaultObstacleConf:ObstacleConfiguration;
@@ -50,8 +54,9 @@ class PlayState extends FlxState
 	private var portals:FlxGroup;
 
 	// Game flags
-	private var gameOver:Bool;
+	public  var isTeleporting:Bool;
 	public  var beginTeleport:Bool;
+	private var gameOver:Bool;
 
 	override public function create():Void
 	{
@@ -82,10 +87,40 @@ class PlayState extends FlxState
 
 		// Create Enemies
 		bulldozers = new FlxTypedGroup<Bulldozer>();
-		var bulldozer = new Bulldozer(((FlxG.width / TILE_WIDTH) / 2) * TILE_WIDTH, 0);
+		var bulldozer1 = new Bulldozer(((FlxG.width / TILE_WIDTH) / 2) * TILE_WIDTH, 0);
+		var bulldozer2 = new Bulldozer(((FlxG.width / TILE_WIDTH) / 2) * TILE_WIDTH - 3 * TILE_WIDTH, 0);
 
-		bulldozers.add(bulldozer);
+		drones = new FlxTypedGroup<Drone>();
+		var drone1 = new Drone(bulldozer1);
+		var drone2 = new Drone(bulldozer2);
+		var drone3 = new Drone(bulldozer2);
+
+		drone2.placeAtCorner(0);
+		drone3.placeAtCorner(2);
+
+		bulldozers.add(bulldozer1);
+		bulldozers.add(bulldozer2);
 		add(bulldozers);
+
+		drones.add(drone1);
+		drones.add(drone2);
+		drones.add(drone3);
+		add(drones);
+
+		enemies = new FlxGroup();
+		enemies.add(drones);
+		enemies.add(bulldozers);
+
+		enemyBullets = new FlxTypedGroup<FlxSprite>(15);
+		for (i in 0...15)
+		{
+			var bullet = new FlxSprite();
+			bullet.makeGraphic(6, 6, FlxColor.RED);
+			bullet.exists = false;
+			enemyBullets.add(bullet);
+		}
+
+		add(enemyBullets);
 
 		// Create player and add to state
 		player = new Player(5, 5);
@@ -115,16 +150,26 @@ class PlayState extends FlxState
 
 		gameOver = false;
 		beginTeleport = false;
+		isTeleporting = false;
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 
+		checkBulletsInsideBounds();
 		checkEnemiesInsideBounds();
+
 		if (!gameOver)
 		{
 			beginTeleport = false;
+
+			if (!isTeleporting)
+			{
+				bulldozers.active = true;
+				drones.active = true;
+				enemyBullets.active = true;
+			}
 
 			// Make sure player cannot cross over borders
 			FlxG.collide(player, borders);
@@ -133,10 +178,13 @@ class PlayState extends FlxState
 			FlxG.overlap(bulldozers, obstacles, bulldozerOverlapObstacle);
 
 			// Enemy/player bullet interaction
-			FlxG.overlap(playerBullets, bulldozers, playerBulletOverlapEnemy);
+			FlxG.overlap(playerBullets, enemies, playerBulletOverlapEnemy);
 
 			// Player walks into portals
 			FlxG.overlap(player, portals, playerOverlapPortals);
+
+			// Player gets hit by a bullet
+			FlxG.overlap(player, enemyBullets, playerOverlapEnemyBullets);
 		}
 		else
 		{
@@ -238,7 +286,6 @@ class PlayState extends FlxState
 	private function playerBulletOverlapEnemy(bullet:FlxObject, enemy:FlxObject):Void
 	{
 		enemy.health -= 1;
-		trace(enemy.health);
 
 		if (enemy.health == 0)
 		{
@@ -265,18 +312,47 @@ class PlayState extends FlxState
 		}
 	}
 
+	private function checkBulletsInsideBounds():Void
+	{
+
+	}
+
 	private function playerOverlapPortals(player:Player, portal:Portal):Void
 	{
 		if (portal.ready)
 		{
 			beginTeleport = true;
+			isTeleporting = true;
 
 			for (exit in portals)
 			{
 				cast(exit, Portal).ready = false;
 			}
 
+			bulldozers.active = false;
+			drones.active = false;
+			enemyBullets.active = false;
 			portal.teleport(player);
+		}
+	}
+
+	private function playerOverlapEnemyBullets(player:FlxObject, bullet:FlxObject):Void
+	{
+		if (!FlxSpriteUtil.isFlickering(player))
+		{
+			player.health -= 1;
+
+			if (player.health == 0)
+			{
+				player.kill();
+				gameOver = true;
+			}
+			else
+			{
+					FlxSpriteUtil.flicker(player, 1.5);
+			}
+
+			bullet.kill();
 		}
 	}
 }

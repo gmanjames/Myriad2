@@ -29,7 +29,10 @@ class Portal extends FlxSprite
     if (timeUntilReady > 0)
     {
       timeUntilReady -= elapsed;
-      trace(timeUntilReady);
+    }
+    else
+    {
+        cast(FlxG.state, PlayState).isTeleporting = false;
     }
   }
 

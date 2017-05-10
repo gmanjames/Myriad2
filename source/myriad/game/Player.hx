@@ -22,6 +22,8 @@ class Player extends FlxSprite
 
     fireClock = 0; // zero so you can fire as soon as the game starts
 
+    health = 5;
+
     changingZones = false;
 
     makeGraphic(32, 32, FlxColor.ORANGE);
@@ -53,7 +55,7 @@ class Player extends FlxSprite
         bullet.velocity.x = -550;
       }
 
-      fireClock = 1;
+      fireClock = 0.5;
     }
   }
 }
