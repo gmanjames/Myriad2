@@ -18,7 +18,7 @@ class Portal extends FlxSprite
   public function new(?X:Float, ?Y:Float)
   {
     super(X, Y);
-    endpoint = new FlxPoint(X, Y);
+    endpoint = new FlxPoint();
     timeUntilReady = 0;
     immovable = true;
     makeGraphic(32, 32, FlxColor.BLUE);
@@ -47,7 +47,7 @@ class Portal extends FlxSprite
   public function set_ready(ready:Bool):Bool
   {
     if (!ready)
-      timeUntilReady = 2;
+      timeUntilReady = 1.2;
     else
       timeUntilReady = 0;
 

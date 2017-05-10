@@ -10,6 +10,7 @@ import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import openfl.Assets;
 import myriad.core.factory.ObstacleFactory;
 import myriad.game.Player;
@@ -62,6 +63,14 @@ class PlayState extends FlxState
 	{
 		super.create();
 
+		var background = new FlxSprite(0, 0);
+		var bgColor = new FlxColor();
+		bgColor.setRGB(128, 255, 128);
+		background.makeGraphic(FlxG.width, FlxG.height, bgColor);
+		background.active = false;
+
+		add(background);
+
 		// Create side sections where player will move
 		leftSide  = new FlxSprite(0, 0);
 		rightSide = new FlxSprite(FlxG.width - TILE_WIDTH * 4, 0);
@@ -78,8 +87,8 @@ class PlayState extends FlxState
 		portals = new FlxGroup();
 		var leftPortal = new Portal(0, FlxG.height / 2 - TILE_WIDTH);
 		var rightPortal = new Portal(FlxG.width - TILE_WIDTH, FlxG.height / 2 - TILE_WIDTH);
-		leftPortal.endpoint.set(rightPortal.x - 3, rightPortal.y);
-		rightPortal.endpoint.set(leftPortal.x + 3, leftPortal.y);
+		leftPortal.endpoint = new FlxPoint(rightPortal.x - TILE_WIDTH, rightPortal.y);
+		rightPortal.endpoint = new FlxPoint(leftPortal.x + TILE_WIDTH, leftPortal.y);
 
 		portals.add(leftPortal);
 		portals.add(rightPortal);
@@ -93,10 +102,10 @@ class PlayState extends FlxState
 		drones = new FlxTypedGroup<Drone>();
 		var drone1 = new Drone(bulldozer1);
 		var drone2 = new Drone(bulldozer2);
-		var drone3 = new Drone(bulldozer2);
+		//var drone3 = new Drone(bulldozer2);
 
 		drone2.placeAtCorner(0);
-		drone3.placeAtCorner(2);
+		//drone3.placeAtCorner(2);
 
 		bulldozers.add(bulldozer1);
 		bulldozers.add(bulldozer2);
@@ -104,7 +113,7 @@ class PlayState extends FlxState
 
 		drones.add(drone1);
 		drones.add(drone2);
-		drones.add(drone3);
+		//drones.add(drone3);
 		add(drones);
 
 		enemies = new FlxGroup();

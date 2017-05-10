@@ -81,7 +81,7 @@ class Drone extends FlxSprite
         if (facing == FlxObject.UP && x > cast(FlxG.state, PlayState).player.x
           || facing == FlxObject.DOWN && x < cast(FlxG.state, PlayState).player.x)
         {
-          if (FlxG.random.bool(50))
+          if (FlxG.random.bool(40))
             fireBullet();
         }
 
