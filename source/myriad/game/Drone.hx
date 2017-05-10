@@ -81,11 +81,11 @@ class Drone extends FlxSprite
         if (facing == FlxObject.UP && x > cast(FlxG.state, PlayState).player.x
           || facing == FlxObject.DOWN && x < cast(FlxG.state, PlayState).player.x)
         {
-          if (FlxG.random.bool(40))
+          if (FlxG.random.bool(57))
             fireBullet();
         }
 
-        fireClock = FlxG.random.float(0.3, 0.5);
+        fireClock = FlxG.random.float(0.2, 0.5);
       }
     }
   }
@@ -118,6 +118,9 @@ class Drone extends FlxSprite
         nextCorner.y = (bulldozer.y + bulldozer.height / 2) + 70 + height / 2;
       }
     }
+
+    if (!bulldozer.exists)
+      kill();
   }
 
   public function fireBullet():Void
@@ -142,12 +145,12 @@ class Drone extends FlxSprite
       direction = 1;
     }
 
-    bullet1.velocity.x = direction * 300; // straight line
+    bullet1.velocity.x = direction * 350; // straight line
 
-    bullet2.velocity.x = direction * 300; // slightly diagonal
+    bullet2.velocity.x = direction * 350; // slightly diagonal
     bullet2.velocity.y = -100;
 
-    bullet3.velocity.x = direction * 300; // slightly diagonal
+    bullet3.velocity.x = direction * 350; // slightly diagonal
     bullet3.velocity.y = 100;
   }
 

@@ -167,7 +167,7 @@ class PlayState extends FlxState
 		super.update(elapsed);
 
 		checkBulletsInsideBounds();
-		checkEnemiesInsideBounds();
+		checkEnemiesInsideBoundsOrDead();
 
 		if (!gameOver)
 		{
@@ -304,18 +304,24 @@ class PlayState extends FlxState
 		bullet.kill();
 	}
 
-	private function checkEnemiesInsideBounds():Void
+	private function checkEnemiesInsideBoundsOrDead():Void
 	{
 		var allBulldozersInMap = true;
+		var allBulldozersDead = true;
 		for (bulldozer in bulldozers)
 		{
 			if (!bulldozer.inWorldBounds())
 			{
 				allBulldozersInMap = false;
 			}
+
+			if (bulldozer.exists)
+			{
+				allBulldozersDead = false;
+			}
 		}
 
-		if (!allBulldozersInMap)
+		if (!allBulldozersInMap || allBulldozersDead)
 		{
 			gameOver = true;
 		}
@@ -323,7 +329,11 @@ class PlayState extends FlxState
 
 	private function checkBulletsInsideBounds():Void
 	{
-
+		for (bullet in enemyBullets)
+		{
+			if (bullet.x > FlxG.width || bullet.x < 0)
+				bullet.kill();
+		}
 	}
 
 	private function playerOverlapPortals(player:Player, portal:Portal):Void
