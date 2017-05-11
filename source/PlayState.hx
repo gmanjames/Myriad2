@@ -102,10 +102,8 @@ class PlayState extends FlxState
 		drones = new FlxTypedGroup<Drone>();
 		var drone1 = new Drone(bulldozer1);
 		var drone2 = new Drone(bulldozer2);
-		//var drone3 = new Drone(bulldozer2);
 
 		drone2.placeAtCorner(0);
-		//drone3.placeAtCorner(2);
 
 		bulldozers.add(bulldozer1);
 		bulldozers.add(bulldozer2);
@@ -113,7 +111,6 @@ class PlayState extends FlxState
 
 		drones.add(drone1);
 		drones.add(drone2);
-		//drones.add(drone3);
 		add(drones);
 
 		enemies = new FlxGroup();

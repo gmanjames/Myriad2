@@ -57,7 +57,7 @@ class Drone extends FlxSprite
       path = pathTo;
       points.push(new FlxPoint(x + width / 2, y + height / 2)); // current corner
       points.push(nextCorner);
-      pathTo.start(points, 200, FlxPath.FORWARD, true);
+      pathTo.start(points, 300, FlxPath.FORWARD, true);
       arrivedAtCorner = false;
     }
 
